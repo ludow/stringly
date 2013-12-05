@@ -6,18 +6,31 @@ var stringly = require('../index.js');
 
 describe('#always', function () {
 
-  it('with simple example', function () {
+  // useless but just checking it works !
+  it('with only one char pattern', function () {
+    expect(stringly.always('string','s')).to.equal('string');
+  });
+
+  it('with a pattern matching multi occurence to replace', function () {
+    var str = '«I love french quotes» & «I love chicken»';
+    str = stringly.always(str,'« ');
+    expect(str).to.equal('« I love french quotes» & « I love chicken»');
+    str = stringly.always(str,' »', 1);
+    expect(str).to.equal('« I love french quotes » & « I love chicken »');
+  });
+
+  it('with two chars pattern', function () {
     var str = '«I love french quotes»';
-    str = stringly.always(str,'«', ' ');
-    expect(str).to.equal('« I love french quotes»');
-    str = stringly.always(str,'»', ' ', true);
+    str = stringly.always(str,' »', 1);
+    expect(str).to.equal('«I love french quotes »');
+    str = stringly.always(str,'« ');
     expect(str).to.equal('« I love french quotes »');
   });
 
-  it('with multi matching', function () {
-    expect(stringly.always('hooo', 'o', 'l')).to.equal('hololol');
-    expect(stringly.always('hooo', 'o', 'l', true)).to.equal('hlololo');
-    expect(stringly.always('hooo', 'o', 'o')).to.equal('hoooo');
+  it('with a longest pattern matching', function () {
+    expect(stringly.always('yo yo', 'olo')).to.equal('yolo yolo');
+    expect(stringly.always('yo yo', 'olo', 1)).to.equal('yo yo');
+    expect(stringly.always('yo yo', 'olo', 2)).to.equal('yolo yolo');
   });
 
 });
